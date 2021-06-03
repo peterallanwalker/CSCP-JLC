@@ -1,0 +1,13 @@
+CSCP_connection: Socket connection established with address 192.169.1.200 on port 12345
+CSCP_connection: Failed to create connection with IP address 192.168.200.114 on port 49300
+CSCP received,  CSCP Message - Recipient: controller, Type: write, Operation: fader_move, Fader Strip: 0, Value: 622, encoded: b'\xf1\x06\xff\x80\x00\x00\x00\x02n\x10'
+Traceback (most recent call last):
+  File "CSCP-JLC.py", line 34, in <module>
+    jlc_message = JLC_encode.Message(cscp_in.operation, cscp_in.strip, cscp_in.value)
+  File "C:\Users\peterw\PycharmProjects\Calrec-JLCooper\JLC_encode.py", line 18, in __init__
+    self.encoded = self._encode()
+  File "C:\Users\peterw\PycharmProjects\Calrec-JLCooper\JLC_encode.py", line 24, in _encode
+    fader_value_byte1, fader_value_byte2 = fader_to_jlc_bytes(self.value)
+  File "C:\Users\peterw\PycharmProjects\Calrec-JLCooper\JLC_encode.py", line 50, in fader_to_jlc_bytes
+    byte1 = hex(value / 2)  # bit shifts right the binary equivalent
+TypeError: 'float' object cannot be interpreted as an integer

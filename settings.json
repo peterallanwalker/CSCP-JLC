@@ -1,0 +1,17 @@
+{
+    "Mixer IP Address": "192.169.1.200",
+    "Mixer CSCP Port": 12345,
+    "JLC IP Address": "192.168.200.114",
+    "JLC Port": 49300,
+    "Mixer Faders": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    ],
+    "Two-Way Fader Control": true
+}
