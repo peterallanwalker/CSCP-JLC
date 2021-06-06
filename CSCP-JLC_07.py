@@ -12,8 +12,8 @@ import CSCP_JLC_settings as config
 import JLC_display_03 as display
 
 
-VERSION = "beta v0.7"
-CUSTOMER = "ITN / DB"
+VERSION = "beta v0.8"
+CUSTOMER = "EVALUATION COPY"
 
 # BASED ON V_04 (DITCHED V_05)
 

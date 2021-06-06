@@ -12,14 +12,14 @@ import CSCP_JLC_settings as config
 
 import JLC_display_03 as display
 
-
-VERSION = "v0.8"
-CUSTOMER = "ITN / DB"
+# Same as V0.8 supplied to ITN, but making it "Eval"/Trial/unsupported - contact (and donate) for a "supported" version
+VERSION = "v0.9"
+CUSTOMER = "EVALUATION"
+WEB = "https://caljlc.github.io/CAL-JLC/"   
 CONTACT = "contact.caljlc@gmail.com"
-# BASED ON V_04 (DITCHED V_05)
 
+# TODO maybe...
 # Get USB working as a config option
-
 # Check for stability, long term running
 # handle JLC connection better - currently drops and reconnect if idle for a time (ping/idle check needs updating from CSCP console readback to a JLC readback
 # handle the fader jitter (JLC OK AS LONG AS TOUCH MAINTAINED, ELSE CAN GET SNAP BACK
