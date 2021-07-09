@@ -1,15 +1,22 @@
 # Licensing
 # https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-strings-in-python/
 
-import sys  # Used for exiting program if license cannot be validated (
+import sys  # Used for exiting program if license cannot be validated
+import glob  # Used for searching for files by their extension
 import subprocess  # Used for reading back Windows UID from PC
 from cryptography.fernet import Fernet  # Used for encrypting and decrypting the license keys
 
-import terminal_formatter as terminal  # My file for formatting pregram header in terminal
+import terminal_formatter as terminal  # My file for formatting program header in terminal
 
 TITLE = "Licensing"
-VERSION = "0.1"
+VERSION = "0.2"
 
+# Version 0.2
+# License files generated as <host uid>.license
+# (so users can identify which license file is for which machine)
+# Licenses searched for by .license extension
+# (so users can rename license files as long as the maintain the extension)
+# Supports multiple .license files being within the folder, will check each until a valid one found
 
 def get_host_uid():
     try:
@@ -51,36 +58,41 @@ def decrypt(encMessage, key):
     try:
         return fernet.decrypt(encMessage).decode()
     except:
-        print("Licensing: failed to verify license, exiting program!")
-        sys.exit()
+        return "invalid"
 
 
 def create_license_file(host_uid, key):
     encoded = encrypt(host_uid, key)
     try:
-        with open("license", "wb") as f:  # write mode set to write bytes ("wb") rather than strings
+        with open(host_uid + ".license", "wb") as f:  # write mode set to write bytes ("wb") rather than strings
             f.write(encoded)
     except:
         print("Licensing: Failed to create license file")
 
 
-def read_license_file(file="license"):
+def read_license_file(file):
     try:
         with open(file, "rb") as f:  # read mode set to read bytes ("rb") rather than strings
             return f.readline()
     except:
-        print("Licensing: Failed to read license file, exiting program!")
-        sys.exit()
+        return None
 
 
-def validate_license(key, file="license"):
-    license = read_license_file(file)
+def validate_license(key):
 
-    if get_host_uid() == decrypt(license, key):
-        return True
-    else:
-        print("Licensing: Failed to validate license, exiting program!")
-        sys.exit()
+    # Get a list of files in the current folder that have the relevant extension
+    license_files = glob.glob('*.license')
+
+    for file in license_files:
+        # Get first line of test from file
+        license = read_license_file(file)
+
+        # Check if license can be decrypted to match the host machine's UID
+        if license and get_host_uid() == decrypt(license, key):
+            return True
+
+    print("Licensing: Failed to find a valid license, exiting program!")
+    sys.exit()
 
 
 if __name__ == '__main__':
@@ -96,7 +108,7 @@ if __name__ == '__main__':
     print("\nnew key generated:", key)
 
     encoded = encrypt(host_uid, key)
-    print("encoded with new key:", encoded)
+    print("UID encoded with new key:", encoded)
 
     decoded = decrypt(encoded, key)
     print("decoded with new key:", decoded)
@@ -110,16 +122,15 @@ if __name__ == '__main__':
     # CREATING A LICENSE FILE
     # Give the customer an exe that calls get_host_uid()
     # Get them to send their uid via email
-
     # Call the following to create a license file for the customers machine:
     create_license_file(host_uid, key)
 
-    valid = validate_license(key)  # Checks if license file present and valid for host UID
+    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHHINE'S UID
+    valid = validate_license(key)
 
     if valid:
         print("\n*** WELCOME", "You're in! ***")
     else:
-        print("This machine is not licensed to run this code!")
-
-
+        print("\nThis machine is not licensed to run this code!")
+        sys.exit()
 
