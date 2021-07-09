@@ -18,6 +18,8 @@ VERSION = "0.2"
 # (so users can rename license files as long as the maintain the extension)
 # Supports multiple .license files being within the folder, will check each until a valid one found
 
+# TODO - Add customer name field to second line of license file, and pass it if the key is valid
+
 def get_host_uid():
     try:
         return subprocess.check_output('wmic csproduct get uuid').decode().split('\n')[1].strip()
