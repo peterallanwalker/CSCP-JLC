@@ -1,5 +1,6 @@
 
 import time
+import sys
 
 import CSCP_connection
 import JLC_connection_lan
@@ -14,12 +15,14 @@ import JLC_display_03 as display
 import licensing
 import terminal_formatter
 
-# Same as V0.8 supplied to ITN, but making it "Eval"/Trial/unsupported - contact (and donate) for a "supported" version
+# adding licensing
+
 TITLE = "CAL-JLC Mixer Control"
 VERSION = "v0.9"
 CUSTOMER = "EVALUATION"
 WEB = "https://caljlc.github.io/CAL-JLC/"
 CONTACT = "contact.caljlc@gmail.com"
+
 
 # TODO maybe...
 # Get USB working as a config option
@@ -201,6 +204,12 @@ def get_mixer_name(cscp):
 
 
 if __name__ == '__main__':
+
+    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHHINE'S UID
+    valid = licensing.validate_license(licensing.KEY)
+    if not valid:
+        print("\nThis machine is not licensed to run this code!")
+        sys.exit()
 
     # Formatted title/heading
     terminal_formatter.print_heading(TITLE, VERSION, (CUSTOMER, WEB, CONTACT))

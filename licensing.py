@@ -11,6 +11,10 @@ import terminal_formatter as terminal  # My file for formatting program header i
 TITLE = "Licensing"
 VERSION = "0.2"
 
+# Private key for license CAL-JLC encoding & decoding - ** DO NOT MAKE THIS SOURCE CODE PUBLIC! **
+KEY = b'edj9nzeY0aEKtVZjE_aCZbak2dUz_ULcsaCUA4krbIg='
+
+
 # Version 0.2
 # License files generated as <host uid>.license
 # (so users can identify which license file is for which machine)
@@ -19,6 +23,7 @@ VERSION = "0.2"
 # Supports multiple .license files being within the folder, will check each until a valid one found
 
 # TODO - Add customer name field to second line of license file, and pass it if the key is valid
+
 
 def get_host_uid():
     try:
