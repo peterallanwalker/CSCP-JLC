@@ -201,9 +201,9 @@ if __name__ == '__main__':
 
     # Formatted title/heading
     print("\n", 40 * "=", "\n", 4 * " ", "CAL-JLC\n", 4 * " ", "version: ", VERSION, "\n", 4 * " ", "Built for",
-          CUSTOMER, "\n", 4 * " ", CONTACT, "\n", 40 * "-", "\n")
+          CUSTOMER, "\n", 4 * " ", WEB, "\n", 4 * " ", CONTACT, "\n", 40 * "-", "\n")
 
-    time.sleep(2)
+    time.sleep(5)
 
     # Get connection settings
     settings = config.get_settings()

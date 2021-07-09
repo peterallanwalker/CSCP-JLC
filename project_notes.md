@@ -222,7 +222,18 @@ WHY AM I NOT GETTING CONTROL JITTER?????
  refactor code base
  re-write in Rust?
  
- 
+ ... Let's try to implement license keys to restrict what PC software can run on...
+- First off, limit the trial version to only run for 10 mins?
+- Create a script that gets a motherboard/CPU/BIOS ID/serial number
+- package as an exe for customers to run on their machine
+- have it generate either a UID they can email me
+- use some for of hashing algo to convert it to a license key, write to a file,send the file to the customer
+- have the program look for the license key file and validate against the hardware to allow it to run.
+
+... This way I can distribute the same exe for the main program rather than hardcoding 
+a license/UID into the exe, read it in from file in same folder
+Means I need to encrypt the UID 
+
  
  
  
