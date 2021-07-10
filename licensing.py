@@ -22,7 +22,8 @@ KEY = b'edj9nzeY0aEKtVZjE_aCZbak2dUz_ULcsaCUA4krbIg='
 # (so users can rename license files as long as the maintain the extension)
 # Supports multiple .license files being within the folder, will check each until a valid one found
 
-# TODO - Add customer name field to second line of license file, and pass it if the key is valid
+# Version 0.3
+# Read system/customer name from second line of license file
 
 
 def get_host_uid():
@@ -30,8 +31,9 @@ def get_host_uid():
         return subprocess.check_output('wmic csproduct get uuid').decode().split('\n')[1].strip()
 
     except:
-        print("Licensing: Failed to read system ID")
-        sys.exit()
+        print("Licensing: Failed to read system ID, cannot validate license")
+        #sys.exit()
+        return None
 
 
 def generate_key():
@@ -68,19 +70,22 @@ def decrypt(encMessage, key):
         return "invalid"
 
 
-def create_license_file(host_uid, key):
+def create_license_file(host_uid, key, customer_reference="Customer Name", system_reference="System"):
     encoded = encrypt(host_uid, key)
     try:
         with open(host_uid + ".license", "wb") as f:  # write mode set to write bytes ("wb") rather than strings
             f.write(encoded)
+            f.write(str.encode("\n" + customer_reference))
+            f.write(str.encode("\n" + system_reference))
     except:
         print("Licensing: Failed to create license file")
 
 
 def read_license_file(file):
+
     try:
         with open(file, "rb") as f:  # read mode set to read bytes ("rb") rather than strings
-            return f.readline()
+            return f.readlines()
     except:
         return None
 
@@ -92,14 +97,17 @@ def validate_license(key):
 
     for file in license_files:
         # Get first line of test from file
-        license = read_license_file(file)
-
+        contents = read_license_file(file)
+        license = contents[0]
         # Check if license can be decrypted to match the host machine's UID
         if license and get_host_uid() == decrypt(license, key):
-            return True
+            customer_name = contents[1].decode().strip()
+            system = contents[2].decode()
+            return customer_name, system
 
-    print("Licensing: Failed to find a valid license, exiting program!")
-    sys.exit()
+    #print("Licensing: Failed to find a valid license, exiting program!")
+    #sys.exit()
+    return False
 
 
 if __name__ == '__main__':
@@ -132,11 +140,11 @@ if __name__ == '__main__':
     # Call the following to create a license file for the customers machine:
     create_license_file(host_uid, key)
 
-    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHHINE'S UID
+    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHINE'S UID
     valid = validate_license(key)
-
+    print("VALID=", valid)
     if valid:
-        print("\n*** WELCOME", "You're in! ***")
+        print("\n*** WELCOME {}, {}".format(valid[0], valid[1]), "You're in! ***")
     else:
         print("\nThis machine is not licensed to run this code!")
         sys.exit()

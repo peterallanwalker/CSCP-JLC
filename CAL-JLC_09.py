@@ -1,6 +1,7 @@
 
 import time
 import sys
+import pyperclip  # for copying host uid to clipboard to help users obtain license
 
 import CSCP_connection
 import JLC_connection_lan
@@ -14,14 +15,13 @@ import JLC_display_03 as display
 
 import licensing
 import terminal_formatter
+import web_info
 
-# adding licensing
+# added licensing
 
 TITLE = "CAL-JLC Mixer Control"
 VERSION = "v0.9"
-CUSTOMER = "EVALUATION"
-WEB = "https://caljlc.github.io/CAL-JLC/"
-CONTACT = "contact.caljlc@gmail.com"
+EVAL_PERIOD = 10 * 60  # Number of seconds program will run for in unlicensed evaluation mode
 
 
 # TODO maybe...
@@ -205,16 +205,35 @@ def get_mixer_name(cscp):
 
 if __name__ == '__main__':
 
-    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHHINE'S UID
+    # CHECK FOR LICENSE FILES AND VALIDATE AGAINST THE HOST MACHINE'S UID
     valid = licensing.validate_license(licensing.KEY)
+
     if not valid:
-        print("\nThis machine is not licensed to run this code!")
-        sys.exit()
+        # sys.exit()  # Quit the program
+        customer_name = "EVALUATION"
+        system_name = ""
+        host_uid = licensing.get_host_uid()
+        pyperclip.copy(host_uid)  # copy host uid to clipboard
+        license_help = ("No license found",
+                        "** RUNNING IN SHORT-TERM EVALUATION MODE **",
+                        "Your product key: {} has been copied to the clipboard".format(host_uid),
+                        "Paste and email to {} to obtain a license and unlock full access".format(web_info.CONTACT),
+                        "Go to {} for more information.".format(web_info.WEB),
+                        "Evaluation mode starting in 10s...")
 
-    # Formatted title/heading
-    terminal_formatter.print_heading(TITLE, VERSION, (CUSTOMER, WEB, CONTACT))
+        terminal_formatter.print_heading(TITLE, VERSION, license_help)
+        time.sleep(10)
+        start_time = time.time()  # Used to time how long application has been running (for evaluation mode)
 
-    time.sleep(5)
+    else:
+        customer_name = valid[0]
+        system_name = valid[1]
+        welcome_text = ("{}, {}".format(customer_name, system_name),
+                        web_info.WEB,
+                        web_info.CONTACT)
+
+        terminal_formatter.print_heading(TITLE, VERSION, welcome_text)
+        time.sleep(5)  # Pause to allow users to read title info
 
     # Get connection settings
     settings = config.get_settings()
@@ -251,8 +270,10 @@ if __name__ == '__main__':
         elif f == 1:
             heading = VERSION
         elif f == 2:
-            heading = CUSTOMER
+            heading = customer_name
         elif f == 3:
+            heading = system_name
+        elif f == 4:
             heading = mixer_name
         else:
             heading = ""
@@ -280,8 +301,18 @@ if __name__ == '__main__':
     jlc.flush()
     print("Running")
 
-    #  Main program loop
+    # MAIN PROGRAM LOOP
     while True:
+
+        # When running without a valid license, quit after evaluation time period
+        if not valid:
+            #print("timer", time.time() - start_time)
+            if time.time() - start_time >= EVAL_PERIOD:
+                terminal_formatter.print_footer("EVALUATION TIME IS UP",
+                                                "Your product key {} has been copied to the clipboard".format(host_uid),
+                                                "Paste and email to {} to obtain a license for full access to this software".format(web_info.CONTACT),
+                                                "Goto {} for more information".format(web_info.WEB))
+                sys.exit()
 
         jlc_in = jlc.get_message()
         if jlc_in:
