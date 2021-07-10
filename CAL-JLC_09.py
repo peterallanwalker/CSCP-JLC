@@ -1,3 +1,6 @@
+# CAL-JLC: two-way protocol translator
+# provides comms between audio mixer supporting the CSCP protocol (Calrec mixers)
+# and JL Cooper fader panels
 
 import time
 import sys
