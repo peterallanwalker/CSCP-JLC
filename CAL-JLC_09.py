@@ -315,7 +315,10 @@ if __name__ == '__main__':
                                                 "Your product key {} has been copied to the clipboard".format(host_uid),
                                                 "Paste and email to {} to obtain a license for full access to this software".format(web_info.CONTACT),
                                                 "Goto {} for more information".format(web_info.WEB))
-                sys.exit()
+                time.sleep(30 * 60)  # Sleep for 30 mins to give chance for someone to read the message before the window closes
+                # TODO - stop connection threads / prevent messaging to the above message it the last thing displayed
+                sys.exit()  # When running from an exe, this causes window to close so you can't see the message
+
 
         jlc_in = jlc.get_message()
         if jlc_in:
