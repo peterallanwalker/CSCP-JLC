@@ -3,6 +3,8 @@
 Provides two-way control between audio mixers supporting the CSCP protocol and
 JL Cooper control panels.
 
+The application is available as a Windows exe to download from https://caljlc.github.io/CAL-JLC/
+
 Tested with JL Cooper Eclipse MXL2.
 
 The default IP address for the JL Cooper panel is 192.168.200.114, and the default port is
