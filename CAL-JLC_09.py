@@ -23,7 +23,7 @@ import web_info
 # added licensing
 
 TITLE = "CAL-JLC Mixer Control"
-VERSION = "v0.9"
+VERSION = "1.0"
 EVAL_PERIOD = 10 * 60  # Number of seconds program will run for in unlicensed evaluation mode
 
 
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     else:
         customer_name = valid[0]
         system_name = valid[1]
-        welcome_text = ("{}, {}".format(customer_name, system_name),
+        welcome_text = ("Licensed for {} {}".format(customer_name, system_name),
                         web_info.WEB,
                         web_info.CONTACT)
 

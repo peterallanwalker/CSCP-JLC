@@ -3,6 +3,7 @@
 
 import sys  # Used for exiting program if license cannot be validated
 import glob  # Used for searching for files by their extension
+from pathlib import Path  # Used to get current directory
 import subprocess  # Used for reading back Windows UID from PC
 from cryptography.fernet import Fernet  # Used for encrypting and decrypting the license keys
 
@@ -72,11 +73,13 @@ def decrypt(encMessage, key):
 
 def create_license_file(host_uid, key, customer_reference="Customer Name", system_reference="System"):
     encoded = encrypt(host_uid, key)
+    filename = "{}-{}-{}.license".format(customer_reference, system_reference, host_uid)
     try:
-        with open(host_uid + ".license", "wb") as f:  # write mode set to write bytes ("wb") rather than strings
+        with open(filename, "wb") as f:  # write mode set to write bytes ("wb") rather than strings
             f.write(encoded)
             f.write(str.encode("\n" + customer_reference))
             f.write(str.encode("\n" + system_reference))
+            print("Licensing: Created license file {} in {}".format(filename, Path.cwd()))
     except:
         print("Licensing: Failed to create license file")
 

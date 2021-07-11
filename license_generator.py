@@ -24,4 +24,4 @@ if __name__ == '__main__':
     customer = input("Enter customer name: ")
     system = input("Enter system name: ")
     host_uid = input("Enter customer's product key: ")
-    licensing.create_license_file(host_uid, licensing.key, customer, system)
+    licensing.create_license_file(host_uid, licensing.KEY, customer, system)
