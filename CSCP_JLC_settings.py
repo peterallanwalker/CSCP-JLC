@@ -179,6 +179,14 @@ def get_settings():
     return r
 
 
+def load_settings():
+    """
+    Requested by DB/ITN, load settings without prompting to confirm
+    :return: dict of connection settings loaded from json file
+    """
+    return _load_settings()
+
+
 def save_settings(config):
     with open(CONFIG_FILE, "w") as f:
         json.dump(config, f, indent=4)

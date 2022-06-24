@@ -4,16 +4,13 @@ import time
 
 import CSCP_connection
 import JLC_connection_lan
-
 import CSCP_encode
 import JLC_encode
-
 import CSCP_JLC_settings as config
-
 import JLC_display_03 as display
 
-# Same as V0.8 supplied to ITN, but making it "Eval"/Trial/unsupported - contact (and donate) for a "supported" version
-VERSION = "v0.9"
+# Same as V0.8 supplied to ITN
+VERSION = "v0.8b"
 CUSTOMER = "EVALUATION"
 WEB = "https://caljlc.github.io/CAL-JLC/"   
 CONTACT = "contact.caljlc@gmail.com"
